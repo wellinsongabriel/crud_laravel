@@ -70,6 +70,7 @@
     <section class="py-5">
         <form action="/produtos/update/{{$produto->id}}" method="POST" enctype="multipart/form-data">
             @csrf
+            @method('PUT')
             <div class="container px-4 px-lg-5 my-5">
                 <h1 class="display-6 fw-bolder">Informações do produto</h1>
                 <hr>
