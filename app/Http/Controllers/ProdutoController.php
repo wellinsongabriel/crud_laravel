@@ -8,18 +8,34 @@ use App\Models\User;
 
 class ProdutoController extends Controller
 {
+
+   
     public function index(){
-        $produtos = Produto::all();
-        return view('welcome',['produtos'=>$produtos]);
+        $search = request('search');
+
+        if($search){
+            $produtos = Produto::orWhere('tipo','like','%'.$search.'%')
+            ->orWhere('marca','like','%'.$search.'%')->get();
+            
+
+        //     $produtos = Produto::orWhere(
+        //         ['tipo','like','%'.$search.'%'],
+        // ['marca','like','%'.$search.'%'])->get();
+        }else{
+            $produtos = Produto::all();
+        }
+        
+        return view('welcome',['produtos'=>$produtos, 'search'=>$search]);
     }
 
     public function criar(){
+        $search = request('search');
         $user = auth()->user();
         $acao = 'criar';
         $produtos = $user->produtos;
 
         $produtoAsParticipant = $user->produtoAsParticipant;
-        return view('produtos.criar',['produtos'=>$produtos, 'produtoAsParticipant'=>$produtoAsParticipant, 'acao'=> $acao]);
+        return view('produtos.criar',['produtos'=>$produtos, 'produtoAsParticipant'=>$produtoAsParticipant, 'acao'=> $acao,'search'=>$search]);
     }
 
 
@@ -54,6 +70,7 @@ class ProdutoController extends Controller
     // }
 
     public function exibir($id){
+        $search = request('search');
         $produto = Produto::findOrFail($id);
         $user = auth()->user();
        
@@ -70,18 +87,18 @@ class ProdutoController extends Controller
         
 
         return view('produtos.exibir',['produto'=>$produto,
-         'produtoOwner'=>$produtoOwner, 'eProprietario'=>$eProprietario]);
+         'produtoOwner'=>$produtoOwner, 'eProprietario'=>$eProprietario,'search'=>$search]);
     }
 
     public function dashboard() {
-
+        $search = request('search');
         $user = auth()->user();
 
         $produtos = $user->produtos;
 
         $produtoAsParticipant = $user->produtoAsParticipant;
 
-        return view('produtos.dashboard', ['produtos' => $produtos, 'produtoAsParticipant'=>$produtoAsParticipant]);
+        return view('produtos.dashboard', ['produtos' => $produtos, 'produtoAsParticipant'=>$produtoAsParticipant,'search'=>$search]);
 
     }
     
@@ -96,6 +113,7 @@ class ProdutoController extends Controller
     
 
     public function editar($id){
+        $search = request('search');
         $user = auth()->user();
         $produto = Produto::findOrFail($id);
         $acao = 'editar';
@@ -105,10 +123,11 @@ class ProdutoController extends Controller
             return redirect('/dashboard');
         }
         return view('produtos.criar',['produto'=>$produto, 'produtos'=>$produtos, 
-        'produtoAsParticipant'=>$produtoAsParticipant, 'acao'=>$acao]);
+        'produtoAsParticipant'=>$produtoAsParticipant, 'acao'=>$acao,'search'=>$search]);
     }
 
     public function update(Request $request){
+        
         $data = $request->all();
         if ($request->hasFile('imagem') && $request->file('imagem')->isValid()){
             $requestImagem = $request->imagem;

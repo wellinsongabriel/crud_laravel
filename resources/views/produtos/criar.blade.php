@@ -46,7 +46,8 @@
                             </div>
                         </div>
                         <label for="title">Preço do produto </label>
-                        <input type="number" step="0,01" class="form-control" id="preco" name="preco"
+                        <input type="number" pattern="[0-9]+([,\.][0-9]+)?" min="0" step="0.010"
+                         class="form-control" id="preco" name="preco"
                             placeholder="Informe o valor do produto">
                     </div>
                 </div>
@@ -93,20 +94,28 @@
                         <div class="form-group">
                             <label for="title">Tamanhos disponíveis </label>
                             <div class="form-group">
-                                <input type="checkbox" name="tamanho[]" value="P"> P
+                                <input type="checkbox" name="tamanho[]" value="P" @php
+                                 echo(in_array('P',$produto->tamanho)?'checked':'');
+                            @endphp > P
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="tamanho[]" value="M"> M
+                                <input type="checkbox" name="tamanho[]" value="M" @php
+                                echo(in_array('M',$produto->tamanho)?'checked':'');
+                           @endphp> M
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="tamanho[]" value="G"> G
+                                <input type="checkbox" name="tamanho[]" value="G" @php
+                                echo(in_array('G',$produto->tamanho)?'checked':'');
+                           @endphp> G
                             </div>
                             <div class="form-group">
-                                <input type="checkbox" name="tamanho[]" value="GG"> GG
+                                <input type="checkbox" name="tamanho[]" value="GG" @php
+                                echo(in_array('GG',$produto->tamanho)?'checked':'');
+                           @endphp> GG
                             </div>
                         </div>
                         <label for="title">Preço do produto </label>
-                        <input type="number" step="0,01" class="form-control" id="preco" name="preco"
+                        <input type="number" pattern="[0-9]+([,\.][0-9]+)?" min="0" step="0.010" class="form-control" id="preco" name="preco"
                             placeholder="Informe o valor do produto" value="{{$produto->preco}}">
                     </div>
                 </div>
